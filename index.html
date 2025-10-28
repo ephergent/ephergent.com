@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE EPHERGENT - END OF TRANSMISSION</title>
+
+    <!-- Google Fonts - matching Flask site -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=B612+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:wght@400;500;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --pink: #f12ca5;
+            --black: #000000;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--black);
+            font-family: 'Montserrat', sans-serif;
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Cosmic Particles Background */
+        #cosmic-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--pink);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 20s infinite linear;
+        }
+
+        .particle:nth-child(odd) {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .particle:nth-child(3n) {
+            background: rgba(241, 44, 165, 0.4);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            max-width: 1200px;
+        }
+
+        /* Image Container with Glitch Effect */
+        .image-container {
+            position: relative;
+            margin-bottom: 3rem;
+            max-width: 90vw;
+            max-height: 70vh;
+        }
+
+        .main-image {
+            width: 150px;
+            height: 150px;
+            display: block;
+            border: 2px solid var(--pink);
+            box-shadow:
+                5px 5px 0 var(--pink),
+                10px 10px 0 rgba(241, 44, 165, 0.3),
+                0 0 30px rgba(241, 44, 165, 0.5);
+        }
+
+        /* Glitch Effect on Image */
+        .glitch-image {
+            position: relative;
+            display: inline-block;
+        }
+
+        .glitch-image::before,
+        .glitch-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: inherit;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+        }
+
+        .glitch-image.active::before {
+            animation: glitch-image-1 0.3s;
+            clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+            transform: translate(-5px, 0);
+            opacity: 0.8;
+        }
+
+        .glitch-image.active::after {
+            animation: glitch-image-2 0.3s;
+            clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+            transform: translate(5px, 0);
+            opacity: 0.8;
+        }
+
+        @keyframes glitch-image-1 {
+            0%, 100% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            33% {
+                transform: translate(-5px, 2px);
+                opacity: 0.8;
+            }
+            66% {
+                transform: translate(5px, -2px);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes glitch-image-2 {
+            0%, 100% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            33% {
+                transform: translate(5px, -2px);
+                opacity: 0.8;
+            }
+            66% {
+                transform: translate(-5px, 2px);
+                opacity: 0.8;
+            }
+        }
+
+        /* Text Glitch Effect */
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+            font-family: 'B612 Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--pink);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(241, 44, 165, 0.8);
+        }
+
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch-text::before {
+            animation: glitch-1 2.5s infinite;
+            color: #ff00c1;
+            z-index: -1;
+        }
+
+        .glitch-text::after {
+            animation: glitch-2 2.5s infinite;
+            color: #00ffff;
+            z-index: -2;
+        }
+
+        @keyframes glitch-1 {
+            0%, 14%, 16%, 49%, 51%, 99%, 100% {
+                transform: none;
+                opacity: 0;
+            }
+            15% {
+                transform: translate(-3px, -1px) skewX(5deg);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translate(3px, 1px) skewX(5deg);
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes glitch-2 {
+            0%, 20%, 22%, 62%, 64%, 99%, 100% {
+                transform: none;
+                opacity: 0;
+            }
+            21% {
+                transform: translate(3px, 2px) skewX(-5deg);
+                opacity: 0.7;
+            }
+            63% {
+                transform: translate(-3px, -2px) skewX(-5deg);
+                opacity: 0.7;
+            }
+        }
+
+        /* Subtitle */
+        .subtitle {
+            font-family: 'Courier Prime', monospace;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            margin-top: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* Scanline Effect */
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(241, 44, 165, 0.02) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.5;
+            animation: scanline 8s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(4px);
+            }
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .glitch-text {
+                font-size: 1rem;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+
+            .main-image {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .glitch-text {
+                font-size: 0.9rem;
+            }
+
+            .subtitle {
+                font-size: 0.8rem;
+            }
+
+            .main-image {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cosmic Particles Container -->
+    <div id="cosmic-particles"></div>
+
+    <!-- Scanline Effect -->
+    <div class="scanline"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Image with Glitch Effect -->
+        <div class="image-container">
+            <div class="glitch-image" id="glitchImage">
+                <!-- Ephergent Logo -->
+                <img src="profile.png" alt="The Ephergent" class="main-image" id="mainImage">
+            </div>
+        </div>
+
+        <!-- Glitched Text -->
+        <h1 class="glitch-text" data-text="END OF TRANSMISSION">&lt;END OF TRANSMISSION&gt;</h1>
+
+    </div>
+
+    <script>
+        // Initialize cosmic particles
+        document.addEventListener('DOMContentLoaded', function() {
+            const particleContainer = document.getElementById('cosmic-particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = Math.random() * 100 + 'vh';
+                particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                particle.style.animationDelay = (Math.random() * 10) + 's';
+                particleContainer.appendChild(particle);
+            }
+        });
+
+        // Random glitch effect on image
+        function triggerGlitch() {
+            const glitchImage = document.getElementById('glitchImage');
+            glitchImage.classList.add('active');
+
+            setTimeout(() => {
+                glitchImage.classList.remove('active');
+            }, 300);
+
+            // Schedule next glitch at random interval (2-8 seconds)
+            const nextGlitch = Math.random() * 6000 + 2000;
+            setTimeout(triggerGlitch, nextGlitch);
+        }
+
+        // Start glitch effect after page load
+        setTimeout(triggerGlitch, 2000);
+
+        // Add random screen flash effect
+        function screenFlash() {
+            const body = document.body;
+            const originalBg = body.style.backgroundColor;
+            body.style.backgroundColor = 'rgba(241, 44, 165, 0.1)';
+
+            setTimeout(() => {
+                body.style.backgroundColor = originalBg;
+            }, 50);
+
+            // Schedule next flash (10-30 seconds)
+            const nextFlash = Math.random() * 20000 + 10000;
+            setTimeout(screenFlash, nextFlash);
+        }
+
+        // Start screen flash effect
+        setTimeout(screenFlash, 5000);
+
+        // RGB split effect on random occasions
+        function rgbSplit() {
+            const mainImage = document.getElementById('mainImage');
+            mainImage.style.filter = 'hue-rotate(180deg) saturate(3)';
+
+            setTimeout(() => {
+                mainImage.style.filter = 'none';
+            }, 100);
+
+            // Schedule next RGB split (5-15 seconds)
+            const nextSplit = Math.random() * 10000 + 5000;
+            setTimeout(rgbSplit, nextSplit);
+        }
+
+        // Start RGB split effect
+        setTimeout(rgbSplit, 3000);
+    </script>
+</body>
+</html>
